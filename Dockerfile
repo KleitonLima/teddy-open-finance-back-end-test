@@ -19,5 +19,5 @@ RUN npm run build
 # Expose the application port
 EXPOSE 3232
 
-# Command to run the application
-CMD ["node", "dist/main"]
+# Command to run migrations and start the application
+CMD ["sh", "./docker-entrypoint.sh"]
