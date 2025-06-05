@@ -1,15 +1,25 @@
 services:
-    db:
-        image: postgres:latest
-        container_name: postgres_teddy
-        ports:
-            - '6552:5432'
-        volumes:
-            - ./db_data:/var/lib/postgres
-        env_file:
-            - ./.env
-        environment:
-            - TZ=America/Sao_Paulo
+  db:
+    image: postgres:latest
+    container_name: postgres_teddy
+    ports:
+      - '6552:5432'
+    volumes:
+      - ./db_data:/var/lib/postgres
+    env_file:
+      - ./.env
+    environment:
+      - TZ=America/Sao_Paulo
+  api:
+    build: .
+    container_name: api_teddy
+    ports:
+      - '3232:3232'
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+    restart: unless-stopped
 
 volumes:
-    db_data:
+  db_data:
