@@ -1,0 +1,15 @@
+services:
+    db:
+        image: postgres:latest
+        container_name: postgres_teddy
+        ports:
+            - '6552:5432'
+        volumes:
+            - ./db_data:/var/lib/postgres
+        env_file:
+            - ./.env
+        environment:
+            - TZ=America/Sao_Paulo
+
+volumes:
+    db_data:
