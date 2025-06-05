@@ -5,8 +5,16 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
 } from 'typeorm';
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  MinLength,
+  IsDate,
+  IsOptional,
+} from 'class-validator';
+import { ShortenedUrl } from '../../shortened-url/entities/shortened-url.entity';
 
 @Entity('users')
 export class User {
@@ -26,12 +34,19 @@ export class User {
   @Column({ default: false })
   deleted: boolean;
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn()
+  @IsDate()
   created_at: Date;
 
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn()
+  @IsDate()
   updated_at: Date;
 
-  @DeleteDateColumn({ name: 'deleted_at', nullable: true })
+  @DeleteDateColumn({ nullable: true })
+  @IsDate()
+  @IsOptional()
   deleted_at: Date | null;
+
+  @OneToMany(() => ShortenedUrl, (shortenedUrl) => shortenedUrl.user)
+  shortened_urls: ShortenedUrl[];
 }
