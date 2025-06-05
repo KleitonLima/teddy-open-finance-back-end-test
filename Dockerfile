@@ -1,26 +1,23 @@
-# Use a imagem oficial do Node.js como imagem base
+# Use the official Node.js image as the base image
 FROM node:22-slim
 
-# Define o diretório de trabalho dentro do contêiner
+# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copia package.json e yarn.lock para o diretório de trabalho
-COPY package.json package-lock.json ./
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
-# Instala as dependências
+# Install the application dependencies
 RUN npm install
 
-# Copia o código da aplicação
+# Copy the rest of the application files
 COPY . .
 
-# Generate Build
+# Build the NestJS application
 RUN npm run build
 
-# Copia o restante do código da aplicação
-COPY . .
+# Expose the application port
+EXPOSE 3000
 
-# Exponha a porta na qual a aplicação irá rodar
-EXPOSE 9070
-
-# Comando para iniciar a aplicação
-CMD ["sh", "-c", "npm start"]
+# Command to run the application
+CMD ["node", "dist/main"]
