@@ -16,6 +16,14 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     const { email, password } = createUserDto;
 
+    const existingUser = await this.usersRepository.findOne({
+      where: { email },
+    });
+
+    if (existingUser) {
+      throw new Error('Usuário já cadastrado! Tente fazer login.');
+    }
+
     const hashPassword = await bcrypt.hash(password, ENVCONFIG.PASS_SALT);
 
     const user = this.usersRepository.create({
