@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-import bcrypt from 'bcrypt';
 import { ENVCONFIG } from 'src/config/env.config';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -21,10 +21,13 @@ export class UsersService {
     });
 
     if (existingUser) {
-      throw new Error('Usuário já cadastrado! Tente fazer login.');
+      throw new ConflictException('Usuário já cadastrado! Tente fazer login.');
     }
 
-    const hashPassword = await bcrypt.hash(password, ENVCONFIG.PASS_SALT);
+    const hashPassword = await bcrypt.hash(
+      password,
+      Number(ENVCONFIG.PASS_SALT),
+    );
 
     const user = this.usersRepository.create({
       email,
