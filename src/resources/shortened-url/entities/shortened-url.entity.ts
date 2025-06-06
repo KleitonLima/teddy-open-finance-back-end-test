@@ -42,11 +42,9 @@ export class ShortenedUrl {
   deleted: boolean;
 
   @CreateDateColumn()
-  @IsDate()
   created_at: Date;
 
   @UpdateDateColumn()
-  @IsDate()
   updated_at: Date;
 
   @DeleteDateColumn({ nullable: true })
