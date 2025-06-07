@@ -8,7 +8,6 @@ import {
   ManyToOne,
 } from 'typeorm';
 import {
-  IsBoolean,
   IsDate,
   IsInt,
   IsOptional,
@@ -37,11 +36,6 @@ export class ShortenedUrl {
   @IsInt()
   @Min(0)
   accesses: number;
-
-  @Column({ default: false })
-  @IsOptional()
-  @IsBoolean()
-  deleted: boolean;
 
   @CreateDateColumn()
   created_at: Date;
