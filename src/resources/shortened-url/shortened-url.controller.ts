@@ -37,21 +37,18 @@ export class ShortenedUrlController {
     return this.shortenedUrlService.findAll(req);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.shortenedUrlService.findOne(+id);
-  }
-
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateShortenedUrlDto: UpdateShortenedUrlDto,
+    @Req() req: Request,
   ) {
-    return this.shortenedUrlService.update(+id, updateShortenedUrlDto);
+    return this.shortenedUrlService.update({ id, req, updateShortenedUrlDto });
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.shortenedUrlService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.shortenedUrlService.remove(id);
   }
 }

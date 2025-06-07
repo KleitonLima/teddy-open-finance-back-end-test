@@ -46,18 +46,21 @@ export class ShortenedUrlService {
     }
 
     return this.shortenedUrlRepository.find({
-      where: { user: { id: user.sub } },
+      where: { user: { id: user.id } },
     });
   }
 
-  findOne(id: number) {
-    return this.shortenedUrlRepository.findOne({
-      where: { id },
-    });
-  }
-
-  async update(id: number, updateShortenedUrlDto: UpdateShortenedUrlDto) {
+  async update({
+    id,
+    req,
+    updateShortenedUrlDto,
+  }: {
+    id: number;
+    req: Request;
+    updateShortenedUrlDto: UpdateShortenedUrlDto;
+  }) {
     const { originalUrl } = updateShortenedUrlDto;
+    const { user } = req;
 
     if (!originalUrl) {
       throw new BadRequestException('A URL é obrigatória');
@@ -65,10 +68,15 @@ export class ShortenedUrlService {
 
     const existingUrl = await this.shortenedUrlRepository.findOne({
       where: { id },
+      relations: ['user'],
     });
 
-    if (!existingUrl) {
+    if (!existingUrl || existingUrl.user?.id !== user.id) {
       throw new BadRequestException('URL não encontrada');
+    }
+
+    if (existingUrl?.user) {
+      delete (existingUrl.user as any).password;
     }
 
     const newShortenedUrl = this.shortenedUrlRepository.create({
