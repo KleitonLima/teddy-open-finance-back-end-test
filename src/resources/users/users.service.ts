@@ -34,6 +34,8 @@ export class UsersService {
       password: hashPassword,
     });
 
+    user.password = '';
+
     return this.usersRepository.save(user);
   }
 
