@@ -30,7 +30,7 @@ export class ShortenedUrlService {
     // Gera um código aleatório para URL encurtada e verifica se já existe uma URL encurtada com o mesmo código
     do {
       const randomCode = this.randomCodeUtils.generate();
-      shortUrl = `${ENVCONFIG.BASE_URL}/${randomCode}`;
+      shortUrl = `${ENVCONFIG.BACKEND_URL}/${randomCode}`;
     } while (
       await this.shortenedUrlRepository.findOne({
         where: { short_url: shortUrl },

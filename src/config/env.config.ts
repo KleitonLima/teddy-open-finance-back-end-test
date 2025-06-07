@@ -8,5 +8,5 @@ export const ENVCONFIG = {
   PASS_SALT: env.PASS_SALT ?? 10,
   JWT_SECRET: env.JWT_SECRET ?? 'jwt-secret',
   JWT_EXPIRATION: env.JWT_EXPIRATION ?? '10m',
-  BASE_URL: env.BASE_URL ?? 'http://localhost:3232',
+  BACKEND_URL: env.BACKEND_URL ?? 'http://localhost:3232/api/v0',
 };
