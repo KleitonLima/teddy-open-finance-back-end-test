@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateShortenedUrlDto } from './dto/create-shortened-url.dto';
 import { UpdateShortenedUrlDto } from './dto/update-shortened-url.dto';
-import { isURL } from 'class-validator';
+import { isURL, isUUID } from 'class-validator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ShortenedUrl } from './entities/shortened-url.entity';
 import { Repository } from 'typeorm';
@@ -69,6 +69,12 @@ export class ShortenedUrlService {
     req: Request;
     updateShortenedUrlDto: UpdateShortenedUrlDto;
   }) {
+    const isValidId = isUUID(id);
+
+    if (!isValidId || !id) {
+      throw new BadRequestException('ID inválido');
+    }
+
     const { originalUrl } = updateShortenedUrlDto;
     const { user } = req;
 
@@ -86,18 +92,26 @@ export class ShortenedUrlService {
       throw new BadRequestException('URL não encontrada');
     }
 
-    const newShortenedUrl = this.shortenedUrlRepository.create({
+    const newShortUrl = this.shortenedUrlRepository.create({
       original_url: updateShortenedUrlDto.originalUrl,
     });
 
-    const updated = this.shortenedUrlRepository.merge(existingUrl, {
-      original_url: newShortenedUrl.original_url,
+    const shortUrlMerged = this.shortenedUrlRepository.merge(existingUrl, {
+      original_url: newShortUrl.original_url,
     });
 
-    return this.shortenedUrlRepository.save(updated);
+    const updated = await this.shortenedUrlRepository.save(shortUrlMerged);
+    delete updated.user;
+
+    return updated;
   }
 
   async remove(id: string, req: Request) {
+    const isValidId = isUUID(id);
+
+    if (!isValidId || !id) {
+      throw new BadRequestException('ID inválido');
+    }
     const { user } = req;
 
     const deleted = await this.shortenedUrlRepository.softDelete({
@@ -105,7 +119,7 @@ export class ShortenedUrlService {
       user: { id: user.id },
     });
 
-    if (!deleted) {
+    if (deleted.affected === 0) {
       throw new BadRequestException(
         'URL não encontrada ou não pertence ao usuário',
       );
