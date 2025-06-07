@@ -40,6 +40,7 @@ export class ShortenedUrlService {
     const shortenedUrl = this.shortenedUrlRepository.create({
       original_url: originalUrl,
       short_url: shortUrl,
+      // Associa o usuário à URL encurtada, se estiver autenticado
       ...(user && { user: { id: user.id } }),
     });
 
@@ -53,6 +54,7 @@ export class ShortenedUrlService {
       throw new BadRequestException('Usuário não autenticado');
     }
 
+    // Buscar somente URLs que pertencem ao usuário autenticado
     return this.shortenedUrlRepository.find({
       where: { user: { id: user.id } },
     });
@@ -79,6 +81,7 @@ export class ShortenedUrlService {
       relations: ['user'],
     });
 
+    // Verifica se a URL existe e se pertence ao usuário que está tentando atualizar
     if (!existingUrl || existingUrl.user?.id !== user.id) {
       throw new BadRequestException('URL não encontrada');
     }
@@ -94,7 +97,20 @@ export class ShortenedUrlService {
     return this.shortenedUrlRepository.save(updated);
   }
 
-  remove(id: string) {
-    return this.shortenedUrlRepository.delete(id);
+  async remove(id: string, req: Request) {
+    const { user } = req;
+
+    const deleted = await this.shortenedUrlRepository.softDelete({
+      id,
+      user: { id: user.id },
+    });
+
+    if (!deleted) {
+      throw new BadRequestException(
+        'URL não encontrada ou não pertence ao usuário',
+      );
+    }
+
+    return { message: 'URL removida com sucesso' };
   }
 }
