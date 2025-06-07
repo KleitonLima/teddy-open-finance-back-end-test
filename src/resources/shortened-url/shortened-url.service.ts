@@ -127,4 +127,25 @@ export class ShortenedUrlService {
 
     return { message: 'URL removida com sucesso' };
   }
+
+  async accessShortenedUrl(shortUrl: string) {
+    if (!shortUrl) {
+      throw new BadRequestException('URL encurtada inválida');
+    }
+
+    const shortenedUrl = await this.shortenedUrlRepository.findOne({
+      where: { short_url: shortUrl },
+    });
+
+    if (!shortenedUrl) {
+      throw new BadRequestException('URL encurtada não encontrada');
+    }
+
+    this.shortenedUrlRepository.update(
+      { id: shortenedUrl.id },
+      { accesses: shortenedUrl.accesses + 1 },
+    );
+
+    return { originalUrl: shortenedUrl.original_url };
+  }
 }

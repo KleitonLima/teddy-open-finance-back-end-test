@@ -52,4 +52,9 @@ export class ShortenedUrlController {
   remove(@Param('id') id: string, @Req() req: Request) {
     return this.shortenedUrlService.remove(id, req);
   }
+
+  @Get(':shortenedUrl')
+  accessShortenedUrl(@Param('shortenedUrl') shortenedUrl: string) {
+    return this.shortenedUrlService.accessShortenedUrl(shortenedUrl);
+  }
 }
