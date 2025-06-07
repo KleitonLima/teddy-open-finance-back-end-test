@@ -75,10 +75,6 @@ export class ShortenedUrlService {
       throw new BadRequestException('URL não encontrada');
     }
 
-    if (existingUrl?.user) {
-      delete (existingUrl.user as any).password;
-    }
-
     const newShortenedUrl = this.shortenedUrlRepository.create({
       original_url: updateShortenedUrlDto.originalUrl,
     });
