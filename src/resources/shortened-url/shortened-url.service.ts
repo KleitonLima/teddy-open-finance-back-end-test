@@ -55,7 +55,7 @@ export class ShortenedUrlService {
     req,
     updateShortenedUrlDto,
   }: {
-    id: number;
+    id: string;
     req: Request;
     updateShortenedUrlDto: UpdateShortenedUrlDto;
   }) {
@@ -86,7 +86,7 @@ export class ShortenedUrlService {
     return this.shortenedUrlRepository.save(updated);
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return this.shortenedUrlRepository.delete(id);
   }
 }

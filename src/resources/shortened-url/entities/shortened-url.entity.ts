@@ -19,8 +19,8 @@ import { User } from '../../users/entities/user.entity';
 
 @Entity('shortened_url')
 export class ShortenedUrl {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   @IsString()

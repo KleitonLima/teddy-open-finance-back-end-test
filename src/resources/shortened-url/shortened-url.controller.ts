@@ -40,7 +40,7 @@ export class ShortenedUrlController {
   @UseGuards(AuthGuard)
   @Patch(':id')
   update(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() updateShortenedUrlDto: UpdateShortenedUrlDto,
     @Req() req: Request,
   ) {
@@ -48,7 +48,7 @@ export class ShortenedUrlController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
+  remove(@Param('id') id: string) {
     return this.shortenedUrlService.remove(id);
   }
 }
