@@ -30,7 +30,7 @@ export class ShortenedUrl {
 
   @Column()
   @IsString()
-  shortened_url: string;
+  short_url: string;
 
   @Column({ default: 0 })
   @IsInt()
