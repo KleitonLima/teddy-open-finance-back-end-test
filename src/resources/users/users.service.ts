@@ -29,13 +29,14 @@ export class UsersService {
       Number(ENVCONFIG.PASS_SALT),
     );
 
-    const user = this.usersRepository.create({
+    const newUser = this.usersRepository.create({
       email,
       password: hashPassword,
     });
 
+    const user = await this.usersRepository.save(newUser);
     user.password = '';
 
-    return this.usersRepository.save(user);
+    return user;
   }
 }
