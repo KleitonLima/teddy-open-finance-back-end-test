@@ -1,15 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ShortenedUrlService } from './shortened-url.service';
 import { CreateShortenedUrlDto } from './dto/create-shortened-url.dto';
 import { UpdateShortenedUrlDto } from './dto/update-shortened-url.dto';
+import { Request } from 'express';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { OptionalAuthGuard } from '../auth/optional-auth.guard';
 
 @Controller('shortened-url')
+@ApiBearerAuth()
 export class ShortenedUrlController {
   constructor(private readonly shortenedUrlService: ShortenedUrlService) {}
 
+  @UseGuards(OptionalAuthGuard)
   @Post()
-  create(@Body() createShortenedUrlDto: CreateShortenedUrlDto) {
-    return this.shortenedUrlService.create(createShortenedUrlDto);
+  create(
+    @Body() createShortenedUrlDto: CreateShortenedUrlDto,
+    @Req() req: Request,
+  ) {
+    return this.shortenedUrlService.create(createShortenedUrlDto, req);
   }
 
   @Get()
@@ -23,7 +41,10 @@ export class ShortenedUrlController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateShortenedUrlDto: UpdateShortenedUrlDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateShortenedUrlDto: UpdateShortenedUrlDto,
+  ) {
     return this.shortenedUrlService.update(+id, updateShortenedUrlDto);
   }
 
