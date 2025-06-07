@@ -38,19 +38,51 @@ export class ShortenedUrlService {
     return this.shortenedUrlRepository.save(shortenedUrl);
   }
 
-  findAll() {
-    return `This action returns all shortenedUrl`;
+  findAll(req: Request) {
+    const { user } = req;
+
+    if (!user) {
+      throw new BadRequestException('Usuário não autenticado');
+    }
+
+    return this.shortenedUrlRepository.find({
+      where: { user: { id: user.sub } },
+    });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} shortenedUrl`;
+    return this.shortenedUrlRepository.findOne({
+      where: { id },
+    });
   }
 
-  update(id: number, updateShortenedUrlDto: UpdateShortenedUrlDto) {
-    return `This action updates a #${id} shortenedUrl`;
+  async update(id: number, updateShortenedUrlDto: UpdateShortenedUrlDto) {
+    const { originalUrl } = updateShortenedUrlDto;
+
+    if (!originalUrl) {
+      throw new BadRequestException('A URL é obrigatória');
+    }
+
+    const existingUrl = await this.shortenedUrlRepository.findOne({
+      where: { id },
+    });
+
+    if (!existingUrl) {
+      throw new BadRequestException('URL não encontrada');
+    }
+
+    const newShortenedUrl = this.shortenedUrlRepository.create({
+      original_url: updateShortenedUrlDto.originalUrl,
+    });
+
+    const updated = this.shortenedUrlRepository.merge(existingUrl, {
+      original_url: newShortenedUrl.original_url,
+    });
+
+    return this.shortenedUrlRepository.save(updated);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} shortenedUrl`;
+    return this.shortenedUrlRepository.delete(id);
   }
 }
