@@ -15,6 +15,7 @@ import { UpdateShortenedUrlDto } from './dto/update-shortened-url.dto';
 import { Request } from 'express';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { OptionalAuthGuard } from '../auth/optional-auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('shortened-url')
 @ApiBearerAuth()
@@ -30,9 +31,10 @@ export class ShortenedUrlController {
     return this.shortenedUrlService.create(createShortenedUrlDto, req);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
-  findAll() {
-    return this.shortenedUrlService.findAll();
+  findAll(@Req() req: Request) {
+    return this.shortenedUrlService.findAll(req);
   }
 
   @Get(':id')
