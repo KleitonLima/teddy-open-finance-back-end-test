@@ -33,11 +33,13 @@ export class ShortenedUrl {
   short_url: string;
 
   @Column({ default: 0 })
+  @IsOptional()
   @IsInt()
   @Min(0)
   accesses: number;
 
   @Column({ default: false })
+  @IsOptional()
   @IsBoolean()
   deleted: boolean;
 
@@ -52,6 +54,7 @@ export class ShortenedUrl {
   @IsDate()
   deleted_at?: Date | null;
 
-  @ManyToOne(() => User, (user) => user.shortened_urls, { nullable: false })
-  user: User;
+  @ManyToOne(() => User, (user) => user.shortened_urls, { nullable: true })
+  @IsOptional()
+  user?: User;
 }
