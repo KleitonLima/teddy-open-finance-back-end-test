@@ -38,8 +38,4 @@ export class UsersService {
 
     return this.usersRepository.save(user);
   }
-
-  findOne(id: string) {
-    return this.usersRepository.findOne({ where: { id } });
-  }
 }
