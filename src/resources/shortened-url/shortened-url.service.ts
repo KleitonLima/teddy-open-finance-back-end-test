@@ -17,17 +17,25 @@ export class ShortenedUrlService {
     private readonly randomCodeUtils: RandomCodeUtil,
   ) {}
 
-  create(createShortenedUrlDto: CreateShortenedUrlDto, req: Request) {
+  async create(createShortenedUrlDto: CreateShortenedUrlDto, req: Request) {
     const { originalUrl } = createShortenedUrlDto;
+    const { user } = req;
 
     if (!isURL(originalUrl)) {
       throw new BadRequestException('URL inválida');
     }
 
-    const randomCode = this.randomCodeUtils.generate();
-    const shortUrl = ENVCONFIG.BASE_URL + '/' + randomCode;
+    let shortUrl: string;
 
-    const user = req.user;
+    // Gera um código aleatório para URL encurtada e verifica se já existe uma URL encurtada com o mesmo código
+    do {
+      const randomCode = this.randomCodeUtils.generate();
+      shortUrl = `${ENVCONFIG.BASE_URL}/${randomCode}`;
+    } while (
+      await this.shortenedUrlRepository.findOne({
+        where: { short_url: shortUrl },
+      })
+    );
 
     const shortenedUrl = this.shortenedUrlRepository.create({
       original_url: originalUrl,
