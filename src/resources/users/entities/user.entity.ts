@@ -31,9 +31,6 @@ export class User {
   @MinLength(6)
   password: string;
 
-  @Column({ default: false })
-  deleted: boolean;
-
   @CreateDateColumn()
   created_at: Date;
 
