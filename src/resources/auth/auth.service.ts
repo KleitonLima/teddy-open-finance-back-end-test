@@ -35,7 +35,7 @@ export class AuthService {
       throw new ConflictException('Email ou password inválidos!');
     }
 
-    const payload = { sub: userLogged.id, email: userLogged.email };
+    const payload = { id: userLogged.id, email: userLogged.email };
     const token = await this.jwtService.signAsync(payload);
 
     return { token };
