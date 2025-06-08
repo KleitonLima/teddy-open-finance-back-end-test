@@ -23,7 +23,7 @@ export class ShortenedUrlController {
   constructor(private readonly shortenedUrlService: ShortenedUrlService) {}
 
   @UseGuards(OptionalAuthGuard)
-  @Post()
+  @Post('create')
   create(
     @Body() createShortenedUrlDto: CreateShortenedUrlDto,
     @Req() req: Request,
@@ -32,7 +32,7 @@ export class ShortenedUrlController {
   }
 
   @UseGuards(AuthGuard)
-  @Get()
+  @Get('all')
   findAll(@Req() req: Request) {
     return this.shortenedUrlService.findAll(req);
   }
