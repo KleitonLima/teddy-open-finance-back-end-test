@@ -3,7 +3,6 @@ import { ENVCONFIG } from 'src/config/env.config';
 import { Repository } from 'typeorm';
 import { ShortenedUrl } from '../shortened-url/entities/shortened-url.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-
 @Injectable()
 export class AppService {
   constructor(
@@ -15,7 +14,7 @@ export class AppService {
     return `Server is running! 🚀\n Please check <a href="http://localhost:${ENVCONFIG.PORT}/api/v0/docs">http://localhost:${ENVCONFIG.PORT}/api/v0/docs</a> for Swagger docs...`;
   }
 
-  async accessShortenedUrl(shortUrl: string) {
+  async accessShortenedUrl(res, shortUrl: string) {
     if (!shortUrl) {
       throw new BadRequestException('URL encurtada inválida');
     }
@@ -33,6 +32,6 @@ export class AppService {
     shortenedUrl.accesses = (shortenedUrl.accesses || 0) + 1;
     await this.shortenedUrlRepository.save(shortenedUrl);
 
-    return { originalUrl: shortenedUrl.original_url };
+    return res.redirect(shortenedUrl.original_url);
   }
 }
