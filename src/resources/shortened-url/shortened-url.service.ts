@@ -50,10 +50,6 @@ export class ShortenedUrlService {
   findAll(req: Request) {
     const { user } = req;
 
-    if (!user) {
-      throw new BadRequestException('Usuário não autenticado');
-    }
-
     // Buscar somente URLs que pertencem ao usuário autenticado
     return this.shortenedUrlRepository.find({
       where: { user: { id: user.id } },
