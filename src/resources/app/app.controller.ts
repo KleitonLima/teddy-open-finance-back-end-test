@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param, Res, Response } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -8,5 +8,13 @@ export class AppController {
   @Get()
   getStatus(): string {
     return this.appService.getAppStatus();
+  }
+
+  @Get(':shortUrl')
+  accessShortenedUrl(
+    @Param('shortUrl') shortUrl: string,
+    @Res() res: Response,
+  ) {
+    return this.appService.accessShortenedUrl(res, shortUrl);
   }
 }

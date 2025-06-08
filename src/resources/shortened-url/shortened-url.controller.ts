@@ -15,6 +15,7 @@ import { UpdateShortenedUrlDto } from './dto/update-shortened-url.dto';
 import { Request } from 'express';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { OptionalAuthGuard } from '../auth/optional-auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('shortened-url')
 @ApiBearerAuth()
@@ -22,7 +23,7 @@ export class ShortenedUrlController {
   constructor(private readonly shortenedUrlService: ShortenedUrlService) {}
 
   @UseGuards(OptionalAuthGuard)
-  @Post()
+  @Post('create')
   create(
     @Body() createShortenedUrlDto: CreateShortenedUrlDto,
     @Req() req: Request,
@@ -30,26 +31,25 @@ export class ShortenedUrlController {
     return this.shortenedUrlService.create(createShortenedUrlDto, req);
   }
 
-  @Get()
-  findAll() {
-    return this.shortenedUrlService.findAll();
+  @UseGuards(AuthGuard)
+  @Get('all')
+  findAll(@Req() req: Request) {
+    return this.shortenedUrlService.findAll(req);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.shortenedUrlService.findOne(+id);
-  }
-
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,
     @Body() updateShortenedUrlDto: UpdateShortenedUrlDto,
+    @Req() req: Request,
   ) {
-    return this.shortenedUrlService.update(+id, updateShortenedUrlDto);
+    return this.shortenedUrlService.update({ id, req, updateShortenedUrlDto });
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.shortenedUrlService.remove(+id);
+  remove(@Param('id') id: string, @Req() req: Request) {
+    return this.shortenedUrlService.remove(id, req);
   }
 }

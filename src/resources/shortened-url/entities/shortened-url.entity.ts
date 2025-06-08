@@ -8,7 +8,6 @@ import {
   ManyToOne,
 } from 'typeorm';
 import {
-  IsBoolean,
   IsDate,
   IsInt,
   IsOptional,
@@ -20,8 +19,8 @@ import { User } from '../../users/entities/user.entity';
 
 @Entity('shortened_url')
 export class ShortenedUrl {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   @IsString()
@@ -37,11 +36,6 @@ export class ShortenedUrl {
   @IsInt()
   @Min(0)
   accesses: number;
-
-  @Column({ default: false })
-  @IsOptional()
-  @IsBoolean()
-  deleted: boolean;
 
   @CreateDateColumn()
   created_at: Date;
