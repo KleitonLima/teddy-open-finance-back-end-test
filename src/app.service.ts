@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ENVCONFIG } from 'src/config/env.config';
 import { Repository } from 'typeorm';
-import { ShortenedUrl } from '../shortened-url/entities/shortened-url.entity';
+import { ShortenedUrl } from './shortened-url/entities/shortened-url.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class AppService {
