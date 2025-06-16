@@ -1,5 +1,5 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { ENVCONFIG } from '../../config/env.config';
+import { ENVCONFIG } from '../config/env.config';
 import { TypeOrmSubscriber } from './subscribe-typeorm.db';
 
 export const AppDataSource = new DataSource({

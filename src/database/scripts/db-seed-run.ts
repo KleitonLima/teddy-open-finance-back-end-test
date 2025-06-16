@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Repository } from 'typeorm';
 import { SeedInterface } from './db-create-seed';
-import { AppDataSource } from '../config/typeorm.db';
+import { AppDataSource } from '../typeorm.db';
 import { Seeder } from '../entities/seeder.entity';
 
 async function run() {
