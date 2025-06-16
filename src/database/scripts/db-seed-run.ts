@@ -3,7 +3,7 @@ import * as path from 'path';
 import { Repository } from 'typeorm';
 import { SeedInterface } from './db-create-seed';
 import { AppDataSource } from '../typeorm.db';
-import { Seeder } from '../entities/seeder.entity';
+import { Seeder } from '../seeder.entity';
 
 async function run() {
   await AppDataSource.initialize();

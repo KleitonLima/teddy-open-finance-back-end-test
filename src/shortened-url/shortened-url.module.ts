@@ -3,7 +3,7 @@ import { ShortenedUrlService } from './shortened-url.service';
 import { ShortenedUrlController } from './shortened-url.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ShortenedUrl } from './entities/shortened-url.entity';
-import { RandomCodeUtil } from '../../utils/random-code.util';
+import { RandomCodeUtil } from 'src/utils/random-code.util';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ShortenedUrl])],

@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './resources/app/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { swaggerConfig } from './config/swagger.config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { setupDbConnection } from './database/connection.db';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
